@@ -1,7 +1,7 @@
 import { PaymentStrategy } from "../Payment/PaymentStrategy";
 import { OrderRepository } from "../Repository/OrderRepository";
 import { DeliveryStrategy } from "../Strategy/DeliveryStrategy";
-import { DeliveryStatus, Order } from "./Order";
+import { DeliveryStatus, Order, PaymentStatus, OrderStatus } from "./Order";
 export class OrderProcessingFacade {
 	private orderRepository: OrderRepository;
 	constructor() {
@@ -22,6 +22,8 @@ export class OrderProcessingFacade {
 				deliveryCost: deliveryInformation.cost,
 				deliveryStatus: DeliveryStatus.PENDING,
 				deliveryDate: deliveryInformation.date,
+				paymentStatus: PaymentStatus.PAID,
+				status: OrderStatus.PROCESSING,
 			});
 
 			return true;
