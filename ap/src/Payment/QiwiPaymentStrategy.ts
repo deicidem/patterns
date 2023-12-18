@@ -1,4 +1,5 @@
 import { Order } from "../Order/Order";
+import { OrderCostCounter } from "../Order/OrderCostCounter";
 import { PaymentStrategy } from "./PaymentStrategy";
 
 type QiwiData = {
@@ -13,8 +14,9 @@ export class QiwiPaymentStrategy implements PaymentStrategy {
 		this.qiwiData = qiwiData;
 	}
 	public processPayment(order: Order): boolean {
+		const totalCost = OrderCostCounter.getTotalCost(order);
 		console.log(`Processing Qiwi payment for order: ${order.id}`);
-		console.log(`Total cost: ${order.totalCost}`);
+		console.log(`Total cost: ${totalCost}`);
 		console.log(`First name: ${this.qiwiData.firstName}`);
 		console.log(`Last name: ${this.qiwiData.lastName}`);
 		console.log(`Phone number: ${this.qiwiData.phoneNumber}`);
