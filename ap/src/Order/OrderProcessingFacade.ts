@@ -12,18 +12,22 @@ export class OrderProcessingFacade {
 		paymentStrategy: PaymentStrategy,
 		deliveryStrategy: DeliveryStrategy
 	): boolean {
+		let deliveryInformation = deliveryStrategy.deliver(order);
+
+		this.orderRepository.update(order.id, {
+			...order,
+			deliveryCost: deliveryInformation.cost,
+			deliveryStatus: DeliveryStatus.PENDING,
+			deliveryDate: deliveryInformation.date,
+			status: OrderStatus.PROCESSING,
+		});
+
 		let paymentSuccessful = paymentStrategy.processPayment(order);
 
 		if (paymentSuccessful) {
-			let deliveryInformation = deliveryStrategy.deliver(order);
-
 			this.orderRepository.update(order.id, {
 				...order,
-				deliveryCost: deliveryInformation.cost,
-				deliveryStatus: DeliveryStatus.PENDING,
-				deliveryDate: deliveryInformation.date,
 				paymentStatus: PaymentStatus.PAID,
-				status: OrderStatus.PROCESSING,
 			});
 
 			return true;
